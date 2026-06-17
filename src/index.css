@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #040a14;
+  --bg-surface: #080f1e;
+  --bg-elevated: #0c1628;
+  --border: #162844;
+  --border-bright: #1e3a5f;
+  --primary: #2563eb;
+  --primary-dim: rgba(37,99,235,0.15);
+  --accent: #f59e0b;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 999px; }
+
+/* ── Animations ─────────────────────────────────── */
+@keyframes gridMove {
+  0%   { background-position: 0 0; }
+  100% { background-position: 48px 48px; }
+}
+@keyframes scanDown {
+  0%   { top: -4px; opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes spinSlowR {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(37,99,235,0.35); }
+  50%       { box-shadow: 0 0 45px rgba(37,99,235,0.6), 0 0 80px rgba(37,99,235,0.15); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.5); opacity: 0.7; }
+}
+
+/* ── Utility classes ─────────────────────────────── */
+.animate-spin-slow  { animation: spinSlow  18s linear infinite; }
+.animate-spin-slowr { animation: spinSlowR 12s linear infinite; }
+.animate-fade-slide { animation: fadeSlideUp 0.25s ease-out; }
+.animate-fade-in    { animation: fadeIn 0.3s ease-out; }
+
+/* ── Risk badges ─────────────────────────────────── */
+.risk-high   { color:#ef4444; background:rgba(239,68,68,0.12);  border:1px solid rgba(239,68,68,0.3); }
+.risk-medium { color:#f59e0b; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.3); }
+.risk-low    { color:#22c55e; background:rgba(34,197,94,0.12);  border:1px solid rgba(34,197,94,0.3); }
+
+/* ── Status badges ───────────────────────────────── */
+.status-open           { color:#f59e0b; background:rgba(245,158,11,0.12); }
+.status-investigating  { color:#60a5fa; background:rgba(96,165,250,0.12); }
+.status-closed         { color:#6b7280; background:rgba(107,114,128,0.12); }
+.status-chargesheet    { color:#22c55e; background:rgba(34,197,94,0.12); }
+
+/* ── Leaflet dark theme ──────────────────────────── */
+.leaflet-container { background:#040a14 !important; }
+.leaflet-control-zoom a {
+  background: #0c1628 !important;
+  color: #94a3b8 !important;
+  border-color: #162844 !important;
+}
+.leaflet-control-attribution { display: none !important; }
+
+/* ── Card base ───────────────────────────────────── */
+.ksp-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+
+/* ── Light Theme ─────────────────────────────────── */
+body.light {
+  --bg-base: #eef2f7;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f4f7fb;
+  --border: #dde5ef;
+  --border-bright: #c5d3e5;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+}
+
+/* Sidebar stays dark in light mode */
+body.light aside {
+  background: #060c1a !important;
+  border-color: #162844 !important;
+}
+
+/* Header adapts */
+body.light header {
+  background: #ffffff !important;
+  border-color: #dde5ef !important;
+}
+
+/* Cards get subtle shadow in light mode */
+body.light .ksp-card,
+body.light [style*="var(--bg-surface)"] {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+
+/* Network & map stay dark in both modes */
+.viz-dark {
+  background: #080f1e !important;
+}
+body.light .viz-dark {
+  border-color: #162844 !important;
+}
+
+/* ── Light theme variables ───────────────── */
+html.light {
+  --bg-base: #f0f4f9;
+  --bg-surface: #ffffff;
+  --bg-elevated: #e8edf5;
+  --border: #d0daea;
+  --border-bright: #b0bfd4;
+  --text-primary: #0f172a;
+  --text-secondary: #1e3a5f;
+  --text-muted: #64748b;
+}
+
+html.light body {
+  background-color: #f0f4f9;
+  background-image:
+    linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Sidebar always stays dark */
+html.light aside {
+  background: #060c1a !important;
+}
+
+/* Input/select fix in light mode */
+html.light input,
+html.light select {
+  color-scheme: light;
+}
+
+html.light .leaflet-container {
+  background: #e8edf5 !important;
+}
