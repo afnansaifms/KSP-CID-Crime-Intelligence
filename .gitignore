@@ -30,3 +30,7 @@ ksp-final.zip
 ksp-dist.zip
 ksp-upload.zip
 ksp-client.zip
+
+client/
+dist/
+node_modules/
