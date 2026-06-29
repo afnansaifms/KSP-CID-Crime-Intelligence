@@ -2,182 +2,145 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design tokens ─────────────────────────────── */
 :root {
-  --bg-base: #040a14;
-  --bg-surface: #080f1e;
-  --bg-elevated: #0c1628;
-  --border: #162844;
-  --border-bright: #1e3a5f;
-  --primary: #2563eb;
-  --primary-dim: rgba(37,99,235,0.15);
-  --accent: #f59e0b;
-  --danger: #ef4444;
-  --success: #22c55e;
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #475569;
+  --bg-base:       #040d1a;
+  --bg-surface:    #071525;
+  --bg-elevated:   #0a1e35;
+  --bg-card:       #0d2340;
+  --border:        #112d4e;
+  --border-bright: #1a4a7a;
+  --primary:       #1a56db;
+  --primary-dim:   rgba(26,86,219,0.15);
+  --primary-glow:  rgba(26,86,219,0.35);
+  --amber:         #f59e0b;
+  --danger:        #dc2626;
+  --success:       #059669;
+  --text-primary:  #e8f0fe;
+  --text-secondary:#8eafd4;
+  --text-muted:    #3d6494;
 }
 
-* { box-sizing: border-box; }
+/* ── Light mode ─────────────────────────────────── */
+html.light {
+  --bg-base:       #eef3fa;
+  --bg-surface:    #ffffff;
+  --bg-elevated:   #f0f5fb;
+  --bg-card:       #e6eef8;
+  --border:        #c5d8ee;
+  --border-bright: #93b8de;
+  --text-primary:  #071525;
+  --text-secondary:#1e4070;
+  --text-muted:    #5a7fa8;
+}
+
+html.light body {
+  background: #eef3fa;
+  background-image:
+    linear-gradient(rgba(26,86,219,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,86,219,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+html.light aside {
+  background: #040d1a !important;
+}
+
+/* ── Reset ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
 
 body {
   font-family: 'DM Sans', sans-serif;
   background-color: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse 70% 50% at 20% 30%, rgba(26,86,219,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 70%, rgba(26,86,219,0.04) 0%, transparent 50%),
+    linear-gradient(rgba(26,86,219,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,86,219,0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  background-attachment: fixed;
   color: var(--text-primary);
-  margin: 0;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
+/* ── Scrollbar ──────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 999px; }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 9px; }
 
 /* ── Animations ─────────────────────────────────── */
-@keyframes gridMove {
-  0%   { background-position: 0 0; }
-  100% { background-position: 48px 48px; }
-}
-@keyframes scanDown {
-  0%   { top: -4px; opacity: 1; }
-  90%  { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-@keyframes spinSlow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-@keyframes spinSlowR {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(-360deg); }
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(37,99,235,0.35); }
-  50%       { box-shadow: 0 0 45px rgba(37,99,235,0.6), 0 0 80px rgba(37,99,235,0.15); }
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-@keyframes dotPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%       { transform: scale(1.5); opacity: 0.7; }
-}
+@keyframes fadeUp    { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
+@keyframes spinSlow  { to { transform:rotate(360deg); } }
+@keyframes spinSlowR { to { transform:rotate(-360deg); } }
+@keyframes scanLine  { 0% { top:-4px; opacity:1; } 90% { opacity:.6; } 100% { top:100%; opacity:0; } }
+@keyframes ticker    { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+@keyframes glowPulse { 0%,100% { box-shadow:0 0 20px var(--primary-glow); } 50% { box-shadow:0 0 45px var(--primary-glow), 0 0 80px rgba(26,86,219,0.15); } }
+@keyframes dotBlink  { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.4); } }
+@keyframes blink     { 0%,100% { opacity:1; } 50% { opacity:0; } }
+@keyframes gridMove  { to { background-position:40px 40px; } }
+@keyframes spin      { to { transform:rotate(360deg); } }
+@keyframes ripple    { 0% { transform:scale(1); opacity:.6; } 100% { transform:scale(2.4); opacity:0; } }
 
-/* ── Utility classes ─────────────────────────────── */
-.animate-spin-slow  { animation: spinSlow  18s linear infinite; }
-.animate-spin-slowr { animation: spinSlowR 12s linear infinite; }
-.animate-fade-slide { animation: fadeSlideUp 0.25s ease-out; }
-.animate-fade-in    { animation: fadeIn 0.3s ease-out; }
+.animate-fade-up     { animation: fadeUp .3s ease-out both; }
+.animate-fade-in     { animation: fadeIn .25s ease-out both; }
+.animate-spin-slow   { animation: spinSlow 18s linear infinite; }
+.animate-spin-slowr  { animation: spinSlowR 14s linear infinite; }
 
-/* ── Risk badges ─────────────────────────────────── */
-.risk-high   { color:#ef4444; background:rgba(239,68,68,0.12);  border:1px solid rgba(239,68,68,0.3); }
-.risk-medium { color:#f59e0b; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.3); }
-.risk-low    { color:#22c55e; background:rgba(34,197,94,0.12);  border:1px solid rgba(34,197,94,0.3); }
+/* ── Risk / Status badges ───────────────────────── */
+.risk-high   { color:#ef4444; background:rgba(239,68,68,0.1);   border:1px solid rgba(239,68,68,0.28); }
+.risk-medium { color:#f59e0b; background:rgba(245,158,11,0.1);  border:1px solid rgba(245,158,11,0.28); }
+.risk-low    { color:#10b981; background:rgba(16,185,129,0.1);  border:1px solid rgba(16,185,129,0.28); }
 
-/* ── Status badges ───────────────────────────────── */
-.status-open           { color:#f59e0b; background:rgba(245,158,11,0.12); }
-.status-investigating  { color:#60a5fa; background:rgba(96,165,250,0.12); }
-.status-closed         { color:#6b7280; background:rgba(107,114,128,0.12); }
-.status-chargesheet    { color:#22c55e; background:rgba(34,197,94,0.12); }
+.status-open          { color:#f59e0b; background:rgba(245,158,11,0.1); }
+.status-investigating { color:#60a5fa; background:rgba(96,165,250,0.1); }
+.status-chargesheet   { color:#10b981; background:rgba(16,185,129,0.1); }
+.status-closed        { color:#4b5563; background:rgba(75,85,99,0.1); }
 
-/* ── Leaflet dark theme ──────────────────────────── */
-.leaflet-container { background:#040a14 !important; }
-.leaflet-control-zoom a {
-  background: #0c1628 !important;
-  color: #94a3b8 !important;
-  border-color: #162844 !important;
-}
-.leaflet-control-attribution { display: none !important; }
-
-/* ── Card base ───────────────────────────────────── */
+/* ── Card glass ─────────────────────────────────── */
 .ksp-card {
   background: var(--bg-surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.ksp-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(26,86,219,0.04) 0%, transparent 60%);
+  pointer-events: none;
 }
 
-
-/* ── Light Theme ─────────────────────────────────── */
-body.light {
-  --bg-base: #eef2f7;
-  --bg-surface: #ffffff;
-  --bg-elevated: #f4f7fb;
-  --border: #dde5ef;
-  --border-bright: #c5d3e5;
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
+/* ── Live dot ───────────────────────────────────── */
+.live-dot {
+  width: 7px; height: 7px; border-radius: 9px;
+  background: #10b981;
+  position: relative;
+  display: inline-block;
+}
+.live-dot::after {
+  content: ''; position: absolute; inset: -3px; border-radius: 9px;
+  background: #10b981;
+  animation: ripple 1.8s ease-out infinite;
 }
 
-/* Sidebar stays dark in light mode */
-body.light aside {
-  background: #060c1a !important;
-  border-color: #162844 !important;
-}
+/* ── Leaflet dark ───────────────────────────────── */
+.leaflet-container         { background: #040d1a !important; }
+.leaflet-control-zoom a    { background:#0a1e35 !important; color:#8eafd4 !important; border-color:#112d4e !important; }
+.leaflet-control-attribution { display:none !important; }
 
-/* Header adapts */
-body.light header {
-  background: #ffffff !important;
-  border-color: #dde5ef !important;
+/* ── Alert ticker ───────────────────────────────── */
+.ticker-wrap {
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
 }
-
-/* Cards get subtle shadow in light mode */
-body.light .ksp-card,
-body.light [style*="var(--bg-surface)"] {
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+.ticker-inner {
+  display: inline-block;
+  animation: ticker 40s linear infinite;
 }
-
-/* Network & map stay dark in both modes */
-.viz-dark {
-  background: #080f1e !important;
-}
-body.light .viz-dark {
-  border-color: #162844 !important;
-}
-
-/* ── Light theme variables ───────────────── */
-html.light {
-  --bg-base: #f0f4f9;
-  --bg-surface: #ffffff;
-  --bg-elevated: #e8edf5;
-  --border: #d0daea;
-  --border-bright: #b0bfd4;
-  --text-primary: #0f172a;
-  --text-secondary: #1e3a5f;
-  --text-muted: #64748b;
-}
-
-html.light body {
-  background-color: #f0f4f9;
-  background-image:
-    linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-/* Sidebar always stays dark */
-html.light aside {
-  background: #060c1a !important;
-}
-
-/* Input/select fix in light mode */
-html.light input,
-html.light select {
-  color-scheme: light;
-}
-
-html.light .leaflet-container {
-  background: #e8edf5 !important;
-}
+.ticker-inner:hover { animation-play-state: paused; }

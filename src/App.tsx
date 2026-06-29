@@ -10,6 +10,7 @@ import Analytics from './pages/Analytics';
 import Profile  from './pages/Profile';
 import Forecast from './pages/Forecast';
 import Financial from './pages/Financial';
+import Admin from './pages/Admin';
 
 function Guard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="profile"   element={<Profile />} />
           <Route path="forecast"  element={<Forecast />} />
           <Route path="financial" element={<Financial />} />
+          <Route path="admin" element={<Admin />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

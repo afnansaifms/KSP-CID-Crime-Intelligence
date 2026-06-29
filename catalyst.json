@@ -1,4 +1,4 @@
-﻿{
+{
   "project_name": "ksp-crime-intelligence",
   "project_id": "50036000000013048",
   "features": [
@@ -12,5 +12,12 @@
         "platform": "React"
       }
     }
-  ]
+  ],
+  "functions": {
+    "targets": [
+      "kiran-api"
+    ],
+    "ignore": [],
+    "source": "functions"
+  }
 }

@@ -32,10 +32,10 @@ I can help you with:
 const SUGGESTIONS_EN = [
   'Show top 5 high-risk accused in Bengaluru',
   'What are the robbery hotspots in 2024?',
-  'Analyse drug trafficking network',
+  'Analyse drug trafficking network crime',
   "Give me today's crime summary",
   'Forecast crime trends for next month',
-  'Profile accused Ravi Kumar G.',
+  'Profile accused Nagesh M. Pai',
 ];
 
 const SUGGESTIONS_KN = [

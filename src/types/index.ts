@@ -105,3 +105,30 @@ export interface CrimeStats {
   changePercent: number;
   coordinates: [number, number];
 }
+export type RegistrationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+
+export interface UserRegistration {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  district: string;
+  badgeNumber: string;
+  department: string;
+  phone: string;
+  status: RegistrationStatus;
+  submittedAt: string;
+  reviewedAt?: string;
+  reviewNote?: string;
+}
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'alert' | 'info' | 'warning' | 'success';
+  read: boolean;
+  timestamp: Date;
+  link?: string;
+}

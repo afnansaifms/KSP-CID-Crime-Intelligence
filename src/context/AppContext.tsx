@@ -75,6 +75,7 @@ const EN: Record<string, string> = {
   'common.warrant': 'WARRANT',
   'common.activeWarrant': 'ACTIVE WARRANT',
   'common.financialLinks': 'FINANCIAL LINKS',
+  'nav.admin': 'Approvals',
 };
 
 const KN: Record<string, string> = {
@@ -148,6 +149,7 @@ const KN: Record<string, string> = {
   'common.warrant': 'ವಾರಂಟ್',
   'common.activeWarrant': 'ಸಕ್ರಿಯ ವಾರಂಟ್',
   'common.financialLinks': 'ಆರ್ಥಿಕ ಸಂಪರ್ಕ',
+  'nav.admin': 'ಅನುಮೋದನೆಗಳು',
 };
 
 interface AppContextType {
