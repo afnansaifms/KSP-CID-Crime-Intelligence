@@ -10,7 +10,7 @@ random.seed(42)
 
 # ── CONFIG ────────────────────────────────────────────────────────────────
 PROJECT_ID = '50036000000013048'
-CATALYST_TOKEN = "w_1000.4ab4a2db1e6461b55a987483d74bf3fd.6647bd2adfc43cea32a371988640f070"  # get from Catalyst Console → Settings → API Token
+CATALYST_TOKEN = "w_1000.xxxxxxxxx.xxxxxxcx"  # get from Catalyst Console → Settings → API Token
 
 BASE_URL = f'https://api.catalyst.zoho.in/baas/v1/project/{PROJECT_ID}/table'
 
