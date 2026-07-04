@@ -1,240 +1,314 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  UserPlus, LogIn, ArrowLeft, Shield, Check, AlertTriangle,
-} from 'lucide-react';
+import { LogIn, UserPlus, ArrowLeft, Check, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 import { useAuth, ROLE_CONFIGS } from '../hooks/useAuth';
 import type { UserRole } from '../types';
 import { KARNATAKA_DISTRICTS } from '../data/mockData';
 import { loginUser, submitRegistration, emailExists } from '../services/authStorage';
 
-
 type View = 'home' | 'login' | 'register' | 'pending';
 
+
 export default function Login() {
-  const [view, setView]       = useState<View>('home');
+  const [view, setView]     = useState<View>('home');
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
-  const [] = useState('');
+  const [error, setError]   = useState('');
+  const [showPass, setShowPass] = useState(false);
 
-  // Login fields
-  const [email, setEmail]     = useState('');
+  const [email, setEmail]   = useState('');
   const [password, setPassword] = useState('');
 
-  // Register fields
-  const [regName, setRegName]       = useState('');
-  const [regEmail, setRegEmail]     = useState('');
-  const [regPass, setRegPass]       = useState('');
-  const [regRole, setRegRole]       = useState<UserRole>('investigator');
+  const [regName, setRegName]     = useState('');
+  const [regEmail, setRegEmail]   = useState('');
+  const [regPass, setRegPass]     = useState('');
+  const [regRole, setRegRole]     = useState<UserRole>('investigator');
   const [regDistrict, setRegDistrict] = useState('Bengaluru Urban');
-  const [regDept, setRegDept]       = useState('');
-  const [regPhone, setRegPhone]     = useState('');
+  const [regDept, setRegDept]     = useState('');
+  const [regPhone, setRegPhone]   = useState('');
 
   const { login } = useAuth();
   const nav = useNavigate();
 
-  useEffect(() => { setTimeout(() => setMounted(true), 80); }, []);
+  useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
 
   const handleLogin = async () => {
-    if (!email || !password) { setError('Please enter email and password'); return; }
+    if (!email || !password) { setError('Enter email and password'); return; }
     setLoading(true); setError('');
-    await new Promise(r => setTimeout(r, 600));
-    const result = loginUser(email, password);
+    await new Promise(r => setTimeout(r, 700));
+    const res = loginUser(email, password);
     setLoading(false);
-    if (result.error) { setError(result.error); return; }
-    const u = result.user;
-    login(u.name, u.role, u.district);
+    if (res.error) { setError(res.error); return; }
+    login(res.user.name, res.user.role, res.user.district);
     nav('/dashboard');
   };
 
   const handleRegister = async () => {
-    if (!regName || !regEmail || !regPass || !regDept || !regPhone) {
-      setError('All fields are required'); return;
-    }
+    if (!regName || !regEmail || !regPass || !regDept || !regPhone) { setError('All fields required'); return; }
     if (regPass.length < 8) { setError('Password must be at least 8 characters'); return; }
-    if (emailExists(regEmail)) { setError('This email is already registered'); return; }
+    if (emailExists(regEmail)) { setError('Email already registered'); return; }
     setLoading(true); setError('');
-    await new Promise(r => setTimeout(r, 800));
-    submitRegistration({
-      name: regName, email: regEmail, password: regPass,
-      role: regRole, district: regDistrict,
-      department: regDept, phone: regPhone,
-      badgeNumber: '',
-    });
+    await new Promise(r => setTimeout(r, 900));
+    submitRegistration({ name:regName, email:regEmail, password:regPass, role:regRole, district:regDistrict, department:regDept, phone:regPhone, badgeNumber:'' });
     setLoading(false);
     setView('pending');
   };
 
-  const inputStyle = {
-    background: 'rgba(255,255,255,0.03)',
-    border: '1px solid rgba(26,86,219,0.25)',
-    color: 'var(--text-primary)',
-    borderRadius: '10px',
-    padding: '10px 14px',
-    fontSize: '13px',
-    width: '100%',
-    outline: 'none',
-    fontFamily: 'DM Sans, sans-serif',
-  };
-
-  const labelStyle = {
-    color: 'var(--text-muted)',
-    fontSize: '9px',
-    fontFamily: 'JetBrains Mono',
-    letterSpacing: '.14em',
-    display: 'block',
-    marginBottom: '6px',
-  };
+  const inp = (val: string, set: (v:string)=>void, placeholder: string, type='text', extra?: React.ReactNode) => (
+    <div style={{ position:'relative' }}>
+      <input type={type} value={val} onChange={e => set(e.target.value)}
+        placeholder={placeholder}
+        onKeyDown={e => e.key==='Enter' && view==='login' && handleLogin()}
+        style={{
+          width:'100%', padding:'11px 14px', borderRadius:8, outline:'none',
+          background:'rgba(255,255,255,0.04)',
+          border:'1px solid rgba(255,255,255,0.08)',
+          color:'#f1f5f9', fontFamily:'var(--font-body)', fontSize:13,
+          transition:'border-color .15s, box-shadow .15s',
+          boxSizing:'border-box',
+        }}
+        onFocus={e => { e.target.style.borderColor='rgba(79,70,229,0.6)'; e.target.style.boxShadow='0 0 0 3px rgba(79,70,229,0.12)'; }}
+        onBlur={e => { e.target.style.borderColor='rgba(255,255,255,0.08)'; e.target.style.boxShadow='none'; }} />
+      {extra}
+    </div>
+  );
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden"
-         style={{ background:'#040d1a' }}>
-
-      {/* Grid background */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage:`linear-gradient(rgba(26,86,219,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,0.05) 1px,transparent 1px)`,
-        backgroundSize:'40px 40px',
-      }} />
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background:'radial-gradient(ellipse 80% 60% at 50% 50%,rgba(26,86,219,0.07) 0%,transparent 70%)',
-      }} />
-
-      {/* Scanline */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div style={{
+      minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center',
+      background:'#05080f', position:'relative', overflow:'hidden',
+    }}>
+      {/* Ambient background */}
+      <div style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
         <div style={{
-          position:'absolute',left:0,right:0,height:'2px',
-          background:'linear-gradient(90deg,transparent,rgba(26,86,219,0.5),transparent)',
-          animation:'scanLine 8s linear infinite',
+          position:'absolute', top:'-20%', left:'50%', transform:'translateX(-50%)',
+          width:800, height:800, borderRadius:'50%',
+          background:'radial-gradient(circle, rgba(79,70,229,0.12) 0%, transparent 65%)',
+        }} />
+        <div style={{
+          position:'absolute', bottom:'-10%', right:'-10%',
+          width:500, height:500, borderRadius:'50%',
+          background:'radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 65%)',
+        }} />
+        {/* Grid */}
+        <div style={{
+          position:'absolute', inset:0,
+          backgroundImage:'linear-gradient(rgba(79,70,229,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,70,229,0.04) 1px,transparent 1px)',
+          backgroundSize:'48px 48px',
+        }} />
+        {/* Scanline */}
+        <div style={{
+          position:'absolute', left:0, right:0, height:2,
+          background:'linear-gradient(90deg,transparent,rgba(79,70,229,0.5),transparent)',
+          animation:'scan 8s linear infinite',
         }} />
       </div>
 
       {/* Corner marks */}
-      {['top-6 left-6 border-t border-l','top-6 right-6 border-t border-r',
-        'bottom-6 left-6 border-b border-l','bottom-6 right-6 border-b border-r'].map((cls,i)=>(
-        <div key={i} className={`absolute w-6 h-6 ${cls} opacity-20`}
-             style={{ borderColor:'#1a56db' }} />
+      {[
+        {top:24,left:24,bt:'border-top',bl:'border-left'},
+        {top:24,right:24,bt:'border-top',bl:'border-right'},
+        {bottom:24,left:24,bt:'border-bottom',bl:'border-left'},
+        {bottom:24,right:24,bt:'border-bottom',bl:'border-right'},
+      ].map((pos,i) => (
+        <div key={i} style={{
+          position:'absolute', width:20, height:20,
+          ...pos,
+          borderTop: (pos.bt==='border-top') ? '1px solid rgba(79,70,229,0.3)' : 'none',
+          borderBottom: (pos.bt==='border-bottom') ? '1px solid rgba(79,70,229,0.3)' : 'none',
+          borderLeft: (pos.bl==='border-left') ? '1px solid rgba(79,70,229,0.3)' : 'none',
+          borderRight: (pos.bl==='border-right') ? '1px solid rgba(79,70,229,0.3)' : 'none',
+        }} />
       ))}
 
-      <div className={`relative z-10 w-full px-6 transition-all duration-700 ${
-        mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-      }`} style={{ maxWidth: view==='register' ? '680px' : '480px' }}>
+      <div style={{
+        position:'relative', zIndex:10, width:'100%', maxWidth: view==='register' ? 640 : 440,
+        padding:'0 24px',
+        opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(20px)',
+        transition:'opacity .6s ease, transform .6s ease',
+      }}>
 
-        {/* Logo always visible */}
-        <div className="text-center mb-6">
-          <div className="relative inline-flex items-center justify-center mb-4">
-            <div className="absolute w-28 h-28 rounded-full animate-spin-slow"
-                 style={{ border:'1px solid rgba(26,86,219,0.1)' }} />
-            <div className="absolute w-20 h-20 rounded-full animate-spin-slowr"
-                 style={{ border:'1px dashed rgba(26,86,219,0.15)' }} />
-            <div className="relative rounded-2xl overflow-hidden flex items-center justify-center"
-                 style={{ width:'64px',height:'64px',background:'rgba(26,86,219,0.08)',
-                          border:'1px solid rgba(26,86,219,0.4)',
-                          boxShadow:'0 0 30px rgba(26,86,219,0.3)',
-                          animation:'glowPulse 3s ease-in-out infinite' }}>
+        {/* Logo section */}
+        <div style={{ textAlign:'center', marginBottom:36 }}>
+          <div style={{ position:'relative', display:'inline-flex', alignItems:'center', justifyContent:'center', marginBottom:20 }}>
+            {/* Rings */}
+            <div style={{
+              position:'absolute', width:100, height:100, borderRadius:'50%',
+              border:'1px solid rgba(79,70,229,0.1)',
+              animation:'spin 20s linear infinite',
+            }} />
+            <div style={{
+              position:'absolute', width:76, height:76, borderRadius:'50%',
+              border:'1px dashed rgba(79,70,229,0.15)',
+              animation:'spin 14s linear infinite reverse',
+            }} />
+            {/* Logo box */}
+            <div style={{
+              width:60, height:60, borderRadius:16,
+              background:'rgba(79,70,229,0.12)',
+              border:'1px solid rgba(79,70,229,0.45)',
+              display:'flex', alignItems:'center', justifyContent:'center',
+              boxShadow:'0 0 32px rgba(79,70,229,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
+              animation:'glow-pulse 3s ease-in-out infinite',
+              position:'relative',
+            }}>
               <img src="/ksp-logo.svg" alt="KSP"
-                   style={{ width:'90%',height:'90%',objectFit:'contain',
-                            filter:'drop-shadow(0 0 6px rgba(96,165,250,0.4))' }} />
+                   style={{ width:42, height:42, objectFit:'contain' }}
+                   onError={e => {
+                     const el = e.target as HTMLImageElement;
+                     el.style.display='none';
+                     el.parentElement!.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+                   }} />
             </div>
           </div>
-          <h1 className="font-display font-bold text-white" style={{ fontSize:'26px',letterSpacing:'.02em' }}>
+
+          <h1 style={{
+            fontFamily:'var(--font-display)', fontWeight:700, fontSize:26,
+            color:'#f1f5f9', letterSpacing:'.01em', margin:'0 0 8px',
+          }}>
             Karnataka State Police
           </h1>
-          <div className="flex items-center justify-center gap-3 mt-2">
-            <div className="h-px flex-1 max-w-12" style={{ background:'linear-gradient(90deg,transparent,rgba(26,86,219,0.5))' }} />
-            <span className="font-mono font-semibold" style={{ color:'#60a5fa',fontSize:'9px',letterSpacing:'.15em' }}>
+
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:12, marginBottom:8 }}>
+            <div style={{ height:1, width:48, background:'linear-gradient(90deg,transparent,rgba(79,70,229,0.5))' }} />
+            <span style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(129,140,248,0.8)', letterSpacing:'.18em' }}>
               CRIME INTELLIGENCE PLATFORM · CID
             </span>
-            <div className="h-px flex-1 max-w-12" style={{ background:'linear-gradient(90deg,rgba(26,86,219,0.5),transparent)' }} />
+            <div style={{ height:1, width:48, background:'linear-gradient(90deg,rgba(79,70,229,0.5),transparent)' }} />
           </div>
         </div>
 
-        {/* ── HOME VIEW ── */}
+        {/* HOME */}
         {view === 'home' && (
-          <div className="space-y-3 animate-fade-up">
-            <p className="text-center text-sm mb-4" style={{ color:'var(--text-muted)' }}>
+          <div style={{ display:'flex', flexDirection:'column', gap:10 }} className="anim-fade-up">
+            <p style={{ textAlign:'center', fontFamily:'var(--font-body)', fontSize:13, color:'rgba(255,255,255,0.35)', marginBottom:4 }}>
               Authorised Karnataka Police personnel only
             </p>
-            <button onClick={() => setView('login')}
-              className="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl font-display font-bold tracking-wider uppercase text-sm transition-all"
-              style={{ background:'linear-gradient(135deg,#1a56db,#1344b0)',
-                       color:'white', border:'1px solid rgba(26,86,219,0.5)',
-                       boxShadow:'0 0 30px rgba(26,86,219,0.3)',fontSize:'13px',letterSpacing:'.06em' }}>
-              <LogIn size={16} /> Sign In to KIRAN
+            <button onClick={() => setView('login')} style={{
+              width:'100%', padding:'14px', borderRadius:10, cursor:'pointer',
+              background:'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
+              border:'none', color:'#fff',
+              fontFamily:'var(--font-display)', fontWeight:700, fontSize:13,
+              letterSpacing:'.06em',
+              display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+              boxShadow:'0 0 32px rgba(79,70,229,0.4), 0 4px 20px rgba(0,0,0,0.4)',
+              transition:'all .15s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-1px)'; (e.currentTarget as HTMLElement).style.boxShadow='0 0 48px rgba(79,70,229,0.5), 0 8px 24px rgba(0,0,0,0.5)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform='none'; (e.currentTarget as HTMLElement).style.boxShadow='0 0 32px rgba(79,70,229,0.4), 0 4px 20px rgba(0,0,0,0.4)'; }}>
+              <LogIn size={15} /> SIGN IN TO KIRAN
             </button>
-            <button onClick={() => setView('register')}
-              className="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl font-display font-bold tracking-wider uppercase text-sm transition-all"
-              style={{ background:'rgba(26,86,219,0.08)', color:'#8eafd4',
-                       border:'1px solid rgba(26,86,219,0.2)', fontSize:'13px', letterSpacing:'.06em' }}>
-              <UserPlus size={16} /> Request Access
+
+            <button onClick={() => setView('register')} style={{
+              width:'100%', padding:'14px', borderRadius:10, cursor:'pointer',
+              background:'rgba(79,70,229,0.08)',
+              border:'1px solid rgba(79,70,229,0.2)', color:'rgba(129,140,248,0.8)',
+              fontFamily:'var(--font-display)', fontWeight:600, fontSize:13, letterSpacing:'.06em',
+              display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+              transition:'all .15s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background='rgba(79,70,229,0.14)'; (e.currentTarget as HTMLElement).style.borderColor='rgba(79,70,229,0.4)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background='rgba(79,70,229,0.08)'; (e.currentTarget as HTMLElement).style.borderColor='rgba(79,70,229,0.2)'; }}>
+              <UserPlus size={15} /> REQUEST ACCESS
             </button>
-            <div className="flex items-center gap-2 mt-4 p-3 rounded-xl"
-                 style={{ background:'rgba(245,158,11,0.06)', border:'1px solid rgba(245,158,11,0.2)' }}>
-              <AlertTriangle size={12} style={{ color: '#f59e0b' }}/>
-              <p className="text-xs" style={{ color:'#92680a' }}>
-                New registrations require approval from the CID Chief before access is granted.
+
+            <div style={{
+              padding:'12px 14px', borderRadius:8, marginTop:4,
+              background:'rgba(245,158,11,0.06)', border:'1px solid rgba(245,158,11,0.18)',
+              display:'flex', gap:10, alignItems:'flex-start',
+            }}>
+              <AlertTriangle size={12} style={{ color:'#f59e0b', flexShrink:0, marginTop:1 }} />
+              <p style={{ fontFamily:'var(--font-body)', fontSize:11, color:'rgba(245,158,11,0.7)', margin:0, lineHeight:1.5 }}>
+                New registrations require CID Chief approval before access is granted.
               </p>
             </div>
-            <p className="text-center text-xs mt-3" style={{ color:'var(--text-muted)' }}>
-              Demo: <span className="font-mono" style={{ color:'#60a5fa' }}>chief@ksp.gov.in</span> / <span className="font-mono" style={{ color:'#60a5fa' }}>KSP@Chief2024</span>
+
+            <p style={{ textAlign:'center', fontFamily:'var(--font-mono)', fontSize:14, color:'rgba(255,255,255,0.2)', marginTop:4 }}>
+              Demo:{' '}
+              <span style={{ color:'rgba(129,140,248,0.7)' }}>chief@ksp.gov.in</span>
+              {' / '}
+              <span style={{ color:'rgba(129,140,248,0.7)' }}>KSP@Chief2024</span>
             </p>
           </div>
         )}
 
-        {/* ── LOGIN VIEW ── */}
+        {/* LOGIN */}
         {view === 'login' && (
-          <div className="animate-fade-up">
-            <button onClick={() => { setView('home'); setError(''); }}
-              className="flex items-center gap-1.5 text-xs mb-5 transition-colors"
-              style={{ color:'var(--text-muted)' }}
-              onMouseEnter={e=>(e.currentTarget.style.color='#60a5fa')}
-              onMouseLeave={e=>(e.currentTarget.style.color='var(--text-muted)')}>
-              <ArrowLeft size={12} /> Back
+          <div className="anim-fade-up">
+            <button onClick={() => { setView('home'); setError(''); }} style={{
+              display:'flex', alignItems:'center', gap:6, marginBottom:20,
+              background:'none', border:'none', cursor:'pointer',
+              fontFamily:'var(--font-body)', fontSize:12, color:'rgba(255,255,255,0.3)',
+              padding:0, transition:'color .15s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color='#818cf8')}
+            onMouseLeave={e => (e.currentTarget.style.color='rgba(255,255,255,0.3)')}>
+              <ArrowLeft size={13} /> Back
             </button>
 
-            <div className="rounded-2xl p-6 space-y-4"
-                 style={{ background:'rgba(7,21,37,0.9)', border:'1px solid rgba(26,86,219,0.2)',
-                          backdropFilter:'blur(16px)' }}>
-              <h2 className="font-display font-bold text-white" style={{ fontSize:'18px' }}>
+            <div style={{
+              padding:28, borderRadius:16,
+              background:'rgba(255,255,255,0.02)',
+              border:'1px solid rgba(255,255,255,0.07)',
+              backdropFilter:'blur(20px)',
+            }}>
+              <h2 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:20, color:'#f1f5f9', margin:'0 0 6px' }}>
                 Officer Sign In
               </h2>
+              <p style={{ fontFamily:'var(--font-body)', fontSize:12, color:'rgba(255,255,255,0.3)', margin:'0 0 24px' }}>
+                Sign in to access the intelligence platform
+              </p>
 
               {error && (
-                <div className="flex items-center gap-2 p-3 rounded-lg"
-                     style={{ background:'rgba(220,38,38,0.1)', border:'1px solid rgba(220,38,38,0.25)' }}>
-                  <AlertTriangle size={13} style={{ color:'#ef4444' }} />
-                  <span className="text-sm" style={{ color:'#fca5a5' }}>{error}</span>
+                <div style={{
+                  display:'flex', gap:8, padding:'10px 14px', borderRadius:8, marginBottom:16,
+                  background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.2)',
+                }}>
+                  <AlertTriangle size={13} style={{ color:'#ef4444', flexShrink:0 }} />
+                  <span style={{ fontFamily:'var(--font-body)', fontSize:12, color:'#fca5a5' }}>{error}</span>
                 </div>
               )}
 
-              <div>
-                <label style={labelStyle}>EMAIL ADDRESS</label>
-                <input type="email" value={email} onChange={e=>setEmail(e.target.value)}
-                  placeholder="officer@ksp.gov.in" style={inputStyle}
-                  onKeyDown={e=>e.key==='Enter'&&handleLogin()} />
-              </div>
-              <div>
-                <label style={labelStyle}>PASSWORD</label>
-                <input type="password" value={password} onChange={e=>setPassword(e.target.value)}
-                  placeholder="••••••••" style={inputStyle}
-                  onKeyDown={e=>e.key==='Enter'&&handleLogin()} />
+              <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+                <div>
+                  <label style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(255,255,255,0.3)', letterSpacing:'.14em', display:'block', marginBottom:7 }}>
+                    EMAIL ADDRESS
+                  </label>
+                  {inp(email, setEmail, 'officer@ksp.gov.in', 'email')}
+                </div>
+                <div>
+                  <label style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(255,255,255,0.3)', letterSpacing:'.14em', display:'block', marginBottom:7 }}>
+                    PASSWORD
+                  </label>
+                  {inp(password, setPassword, '••••••••', showPass ? 'text' : 'password',
+                    <button onClick={() => setShowPass(p => !p)} style={{
+                      position:'absolute', right:12, top:'50%', transform:'translateY(-50%)',
+                      background:'none', border:'none', cursor:'pointer', color:'rgba(255,255,255,0.3)', padding:0,
+                    }}>
+                      {showPass ? <EyeOff size={14} /> : <Eye size={14} />}
+                    </button>
+                  )}
+                </div>
+
+                <button onClick={handleLogin} disabled={loading} style={{
+                  width:'100%', padding:'13px', borderRadius:9, cursor:'pointer',
+                  background:'linear-gradient(135deg,#4f46e5,#4338ca)',
+                  border:'none', color:'#fff',
+                  fontFamily:'var(--font-display)', fontWeight:700, fontSize:13, letterSpacing:'.04em',
+                  display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+                  boxShadow:'0 0 24px rgba(79,70,229,0.35)',
+                  opacity: loading ? .7 : 1,
+                  marginTop:4,
+                }}>
+                  {loading
+                    ? <><span style={{ width:14, height:14, border:'2px solid rgba(255,255,255,.3)', borderTopColor:'#fff', borderRadius:'50%', animation:'spin .7s linear infinite' }} /> Authenticating...</>
+                    : <><LogIn size={14} /> ACCESS KIRAN</>}
+                </button>
               </div>
 
-              <button onClick={handleLogin} disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-display font-bold transition-all"
-                style={{ background:'linear-gradient(135deg,#1a56db,#1344b0)', color:'white',
-                         border:'1px solid rgba(26,86,219,0.5)',
-                         boxShadow:'0 0 24px rgba(26,86,219,0.3)', fontSize:'13px',
-                         letterSpacing:'.06em', cursor:loading?'not-allowed':'pointer' }}>
-                {loading
-                  ? <><span className="w-4 h-4 border-2 rounded-full border-white border-t-transparent" style={{ animation:'spin .7s linear infinite' }}/> Authenticating...</>
-                  : <><LogIn size={14}/> ACCESS KIRAN SYSTEM</>}
-              </button>
-
-              <p className="text-center text-xs" style={{ color:'var(--text-muted)' }}>
-                Don't have access?{' '}
-                <button onClick={() => { setView('register'); setError(''); }}
-                  className="transition-colors" style={{ color:'#60a5fa' }}>
+              <p style={{ textAlign:'center', fontFamily:'var(--font-body)', fontSize:12, color:'rgba(255,255,255,0.25)', marginTop:20, marginBottom:0 }}>
+                No access?{' '}
+                <button onClick={() => { setView('register'); setError(''); }} style={{ background:'none', border:'none', cursor:'pointer', color:'#818cf8', fontFamily:'var(--font-body)', fontSize:12, padding:0 }}>
                   Request registration
                 </button>
               </p>
@@ -242,141 +316,137 @@ export default function Login() {
           </div>
         )}
 
-        {/* ── REGISTER VIEW ── */}
+        {/* REGISTER */}
         {view === 'register' && (
-          <div className="animate-fade-up">
-            <button onClick={() => { setView('home'); setError(''); }}
-              className="flex items-center gap-1.5 text-xs mb-5 transition-colors"
-              style={{ color:'var(--text-muted)' }}
-              onMouseEnter={e=>(e.currentTarget.style.color='#60a5fa')}
-              onMouseLeave={e=>(e.currentTarget.style.color='var(--text-muted)')}>
-              <ArrowLeft size={12} /> Back
+          <div className="anim-fade-up">
+            <button onClick={() => { setView('home'); setError(''); }} style={{
+              display:'flex', alignItems:'center', gap:6, marginBottom:20,
+              background:'none', border:'none', cursor:'pointer',
+              fontFamily:'var(--font-body)', fontSize:12, color:'rgba(255,255,255,0.3)', padding:0,
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color='#818cf8')}
+            onMouseLeave={e => (e.currentTarget.style.color='rgba(255,255,255,0.3)')}>
+              <ArrowLeft size={13} /> Back
             </button>
 
-            <div className="rounded-2xl p-6"
-                 style={{ background:'rgba(7,21,37,0.9)', border:'1px solid rgba(26,86,219,0.2)',
-                          backdropFilter:'blur(16px)' }}>
-              <h2 className="font-display font-bold text-white mb-1" style={{ fontSize:'18px' }}>
+            <div style={{
+              padding:28, borderRadius:16,
+              background:'rgba(255,255,255,0.02)',
+              border:'1px solid rgba(255,255,255,0.07)',
+            }}>
+              <h2 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:20, color:'#f1f5f9', margin:'0 0 4px' }}>
                 Request System Access
               </h2>
-              <p className="text-xs mb-5" style={{ color:'var(--text-muted)' }}>
-                Your registration will be reviewed and approved by the CID Chief
+              <p style={{ fontFamily:'var(--font-body)', fontSize:12, color:'rgba(255,255,255,0.3)', margin:'0 0 24px' }}>
+                Reviewed and approved by the CID Chief
               </p>
 
               {error && (
-                <div className="flex items-center gap-2 p-3 rounded-lg mb-4"
-                     style={{ background:'rgba(220,38,38,0.1)', border:'1px solid rgba(220,38,38,0.25)' }}>
-                  <AlertTriangle size={13} style={{ color:'#ef4444' }} />
-                  <span className="text-sm" style={{ color:'#fca5a5' }}>{error}</span>
+                <div style={{ display:'flex', gap:8, padding:'10px 14px', borderRadius:8, marginBottom:16, background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.2)' }}>
+                  <AlertTriangle size={13} style={{ color:'#ef4444', flexShrink:0 }} />
+                  <span style={{ fontFamily:'var(--font-body)', fontSize:12, color:'#fca5a5' }}>{error}</span>
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label style={labelStyle}>FULL NAME</label>
-                  <input value={regName} onChange={e=>setRegName(e.target.value)}
-                    placeholder="Officer full name" style={inputStyle} />
-                </div>
-                <div>
-                  <label style={labelStyle}>OFFICIAL EMAIL</label>
-                  <input type="email" value={regEmail} onChange={e=>setRegEmail(e.target.value)}
-                    placeholder="officer@ksp.gov.in" style={inputStyle} />
-                </div>
-                <div>
-                  <label style={labelStyle}>PASSWORD</label>
-                  <input type="password" value={regPass} onChange={e=>setRegPass(e.target.value)}
-                    placeholder="Min 8 characters" style={inputStyle} />
-                </div>
-                <div>
-                  <label style={labelStyle}>PHONE NUMBER</label>
-                  <input value={regPhone} onChange={e=>setRegPhone(e.target.value)}
-                    placeholder="9XXXXXXXXX" style={inputStyle} />
-                </div>
-                <div>
-                  <label style={labelStyle}>ACCESS ROLE</label>
-                  <select value={regRole} onChange={e=>setRegRole(e.target.value as UserRole)}
-                    style={{ ...inputStyle, cursor:'pointer' }}>
-                    {Object.entries(ROLE_CONFIGS).map(([r,cfg])=>(
-                      <option key={r} value={r} style={{ background:'#071525' }}>{cfg.label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label style={labelStyle}>DISTRICT</label>
-                  <select value={regDistrict} onChange={e=>setRegDistrict(e.target.value)}
-                    style={{ ...inputStyle, cursor:'pointer' }}>
-                    {KARNATAKA_DISTRICTS.map(d=>(
-                      <option key={d} value={d} style={{ background:'#071525' }}>{d}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="col-span-2">
-                  <label style={labelStyle}>DEPARTMENT / UNIT</label>
-                  <input value={regDept} onChange={e=>setRegDept(e.target.value)}
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
+                {[
+                  { label:'FULL NAME', val:regName, set:setRegName, ph:'Officer full name' },
+                  { label:'OFFICIAL EMAIL', val:regEmail, set:setRegEmail, ph:'officer@ksp.gov.in', type:'email' },
+                  { label:'PASSWORD', val:regPass, set:setRegPass, ph:'Min 8 characters', type:'password' },
+                  { label:'PHONE', val:regPhone, set:setRegPhone, ph:'9XXXXXXXXX' },
+                ].map(f => (
+                  <div key={f.label}>
+                    <label style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(255,255,255,0.3)', letterSpacing:'.14em', display:'block', marginBottom:7 }}>
+                      {f.label}
+                    </label>
+                    <input type={f.type || 'text'} value={f.val} onChange={e => f.set(e.target.value)}
+                      placeholder={f.ph}
+                      style={{ width:'100%', padding:'10px 12px', borderRadius:7, outline:'none', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', color:'#f1f5f9', fontFamily:'var(--font-body)', fontSize:13, boxSizing:'border-box' }}
+                      onFocus={e => { e.target.style.borderColor='rgba(79,70,229,0.6)'; e.target.style.boxShadow='0 0 0 3px rgba(79,70,229,0.12)'; }}
+                      onBlur={e => { e.target.style.borderColor='rgba(255,255,255,0.08)'; e.target.style.boxShadow='none'; }} />
+                  </div>
+                ))}
+
+                {[
+                  { label:'ACCESS ROLE', val:regRole, set:setRegRole as any, options: Object.entries(ROLE_CONFIGS).map(([k,v]) => ({ value:k, label:v.label })) },
+                  { label:'DISTRICT', val:regDistrict, set:setRegDistrict, options: KARNATAKA_DISTRICTS.map(d => ({ value:d, label:d })) },
+                ].map(f => (
+                  <div key={f.label}>
+                    <label style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(255,255,255,0.3)', letterSpacing:'.14em', display:'block', marginBottom:7 }}>
+                      {f.label}
+                    </label>
+                    <select value={f.val} onChange={e => f.set(e.target.value)}
+                      style={{ width:'100%', padding:'10px 12px', borderRadius:7, outline:'none', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', color:'#f1f5f9', fontFamily:'var(--font-body)', fontSize:13, boxSizing:'border-box', cursor:'pointer' }}>
+                      {f.options.map(o => <option key={o.value} value={o.value} style={{ background:'#0d1424' }}>{o.label}</option>)}
+                    </select>
+                  </div>
+                ))}
+
+                <div style={{ gridColumn:'1/-1' }}>
+                  <label style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(255,255,255,0.3)', letterSpacing:'.14em', display:'block', marginBottom:7 }}>
+                    DEPARTMENT / UNIT
+                  </label>
+                  <input value={regDept} onChange={e => setRegDept(e.target.value)}
                     placeholder="e.g. Crime Investigation Department, Cyber Crime Cell"
-                    style={inputStyle} />
+                    style={{ width:'100%', padding:'10px 12px', borderRadius:7, outline:'none', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', color:'#f1f5f9', fontFamily:'var(--font-body)', fontSize:13, boxSizing:'border-box' }}
+                    onFocus={e => { e.target.style.borderColor='rgba(79,70,229,0.6)'; e.target.style.boxShadow='0 0 0 3px rgba(79,70,229,0.12)'; }}
+                    onBlur={e => { e.target.style.borderColor='rgba(255,255,255,0.08)'; e.target.style.boxShadow='none'; }} />
                 </div>
               </div>
 
-              <div className="flex items-start gap-2 mt-4 p-3 rounded-xl"
-                   style={{ background:'rgba(245,158,11,0.06)', border:'1px solid rgba(245,158,11,0.18)' }}>
-                <Shield size={12} style={{ color:'#f59e0b', marginTop:'1px', flexShrink:0 }} />
-                <p className="text-xs" style={{ color:'#92680a' }}>
-                  All registrations are subject to verification by the CID Chief. False information will result in disciplinary action.
-                </p>
-              </div>
-
-              <button onClick={handleRegister} disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-display font-bold mt-4 transition-all"
-                style={{ background:'rgba(26,86,219,0.15)', color:'#93c5fd',
-                         border:'1px solid rgba(26,86,219,0.35)', fontSize:'13px',
-                         letterSpacing:'.06em', cursor:loading?'not-allowed':'pointer' }}>
+              <button onClick={handleRegister} disabled={loading} style={{
+                width:'100%', padding:'13px', borderRadius:9, cursor:'pointer', marginTop:20,
+                background:'rgba(79,70,229,0.15)',
+                border:'1px solid rgba(79,70,229,0.35)', color:'#818cf8',
+                fontFamily:'var(--font-display)', fontWeight:700, fontSize:13, letterSpacing:'.04em',
+                display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+              }}>
                 {loading
-                  ? <><span className="w-4 h-4 border-2 rounded-full border-blue-400 border-t-transparent" style={{ animation:'spin .7s linear infinite' }}/> Submitting...</>
-                  : <><UserPlus size={14}/> SUBMIT REGISTRATION REQUEST</>}
+                  ? <><span style={{ width:14, height:14, border:'2px solid rgba(129,140,248,.3)', borderTopColor:'#818cf8', borderRadius:'50%', animation:'spin .7s linear infinite' }} /> Submitting...</>
+                  : <><UserPlus size={14} /> SUBMIT REQUEST</>}
               </button>
             </div>
           </div>
         )}
 
-        {/* ── PENDING VIEW ── */}
+        {/* PENDING */}
         {view === 'pending' && (
-          <div className="animate-fade-up text-center">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-                 style={{ background:'rgba(5,150,105,0.15)', border:'2px solid rgba(5,150,105,0.4)' }}>
+          <div className="anim-fade-up" style={{ textAlign:'center' }}>
+            <div style={{
+              width:64, height:64, borderRadius:'50%', margin:'0 auto 20px',
+              background:'rgba(16,185,129,0.12)',
+              border:'2px solid rgba(16,185,129,0.4)',
+              display:'flex', alignItems:'center', justifyContent:'center',
+              boxShadow:'0 0 32px rgba(16,185,129,0.2)',
+            }}>
               <Check size={28} style={{ color:'#10b981' }} />
             </div>
-            <h2 className="font-display font-bold text-white mb-2" style={{ fontSize:'20px' }}>
+            <h2 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:22, color:'#f1f5f9', marginBottom:8 }}>
               Registration Submitted
             </h2>
-            <p className="text-sm mb-6" style={{ color:'var(--text-muted)' }}>
-              Your request has been sent to the CID Chief for review. You will be notified once your access is approved.
+            <p style={{ fontFamily:'var(--font-body)', fontSize:13, color:'rgba(255,255,255,0.4)', marginBottom:24 }}>
+              Your request has been sent to the CID Chief for review.
             </p>
-            <div className="rounded-xl p-4 mb-5 text-left"
-                 style={{ background:'rgba(5,150,105,0.06)', border:'1px solid rgba(5,150,105,0.2)' }}>
-              {[
-                ['Status','Pending CID Chief approval'],
-                ['Next Step','Chief will review within 24 hours'],
-                ['Contact','cid.chief@ksp.gov.in'],
-              ].map(([k,v])=>(
-                <div key={k} className="flex justify-between text-sm py-1.5"
-                     style={{ borderBottom:'1px solid rgba(5,150,105,0.1)' }}>
-                  <span style={{ color:'var(--text-muted)' }}>{k}</span>
-                  <span style={{ color:'#10b981' }}>{v}</span>
+            <div style={{ padding:20, borderRadius:12, background:'rgba(16,185,129,0.05)', border:'1px solid rgba(16,185,129,0.15)', marginBottom:20, textAlign:'left' }}>
+              {[['Status','Pending CID Chief approval'],['Response','Within 24 hours'],['Contact','cid.chief@ksp.gov.in']].map(([k,v]) => (
+                <div key={k} style={{ display:'flex', justifyContent:'space-between', padding:'8px 0', borderBottom:'1px solid rgba(16,185,129,0.08)' }}>
+                  <span style={{ fontFamily:'var(--font-mono)', fontSize:11, color:'rgba(255,255,255,0.3)' }}>{k}</span>
+                  <span style={{ fontFamily:'var(--font-body)', fontSize:12, color:'#10b981' }}>{v}</span>
                 </div>
               ))}
             </div>
-            <button onClick={() => setView('login')}
-              className="w-full py-3 rounded-xl font-display font-bold transition-all"
-              style={{ background:'rgba(26,86,219,0.1)', color:'#93c5fd',
-                       border:'1px solid rgba(26,86,219,0.3)', fontSize:'13px', letterSpacing:'.06em' }}>
+            <button onClick={() => setView('login')} style={{
+              width:'100%', padding:'13px', borderRadius:9, cursor:'pointer',
+              background:'rgba(79,70,229,0.1)', border:'1px solid rgba(79,70,229,0.25)', color:'#818cf8',
+              fontFamily:'var(--font-display)', fontWeight:600, fontSize:13,
+            }}>
               Back to Sign In
             </button>
           </div>
         )}
 
-        <p className="text-center mt-5 text-xs" style={{ color:'var(--text-muted)' }}>
-          Karnataka State Police · CID · Restricted Access · Unauthorized use is an offence
+        <p style={{ textAlign:'center', fontFamily:'var(--font-mono)', fontSize:10, color:'rgb(255, 0, 0)', marginTop:24, letterSpacing:'.06em' }}>
+          KARNATAKA STATE POLICE · CID · RESTRICTED ACCESS
         </p>
       </div>
     </div>

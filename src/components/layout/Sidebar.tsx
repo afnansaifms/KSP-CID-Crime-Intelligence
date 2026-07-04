@@ -2,22 +2,21 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, MessageSquare, Network, Map,
   BarChart3, UserSearch, TrendingUp, LogOut,
-  ChevronRight, DollarSign,
+  ChevronRight, DollarSign, ShieldCheck,
 } from 'lucide-react';
 import { useAuth, ROLE_CONFIGS } from '../../hooks/useAuth';
 import { useApp } from '../../context/AppContext';
-import { ShieldCheck } from 'lucide-react'; 
 
 const NAV = [
-  { to:'/dashboard', icon:LayoutDashboard, key:'nav.overview',  roles:['investigator','analyst','supervisor','policymaker'] },
-  { to:'/chat',      icon:MessageSquare,   key:'nav.chat',       roles:['investigator','analyst','supervisor'] },
-  { to:'/network',   icon:Network,         key:'nav.network',    roles:['investigator','analyst','supervisor'] },
-  { to:'/heatmap',   icon:Map,             key:'nav.heatmap',    roles:['investigator','analyst','supervisor','policymaker'] },
-  { to:'/analytics', icon:BarChart3,       key:'nav.analytics',  roles:['investigator','analyst','supervisor','policymaker'] },
-  { to:'/profile',   icon:UserSearch,      key:'nav.profile',    roles:['investigator','analyst','supervisor'] },
-  { to:'/forecast',  icon:TrendingUp,      key:'nav.forecast',   roles:['analyst','supervisor','policymaker'] },
-  { to:'/financial', icon:DollarSign,      key:'nav.financial',  roles:['investigator','analyst','supervisor'] },
-  { to:'/admin', icon:ShieldCheck, key:'nav.admin', roles:['supervisor'] },
+  { to:'/dashboard', icon:LayoutDashboard, key:'nav.overview',  label:'Overview',          roles:['investigator','analyst','supervisor','policymaker'] },
+  { to:'/chat',      icon:MessageSquare,   key:'nav.chat',       label:'Chat Intelligence', roles:['investigator','analyst','supervisor'] },
+  { to:'/network',   icon:Network,         key:'nav.network',    label:'Criminal Networks', roles:['investigator','analyst','supervisor'] },
+  { to:'/heatmap',   icon:Map,             key:'nav.heatmap',    label:'Crime Heatmap',     roles:['investigator','analyst','supervisor','policymaker'] },
+  { to:'/analytics', icon:BarChart3,       key:'nav.analytics',  label:'Analytics',         roles:['investigator','analyst','supervisor','policymaker'] },
+  { to:'/profile',   icon:UserSearch,      key:'nav.profile',    label:'Offender Profiles', roles:['investigator','analyst','supervisor'] },
+  { to:'/forecast',  icon:TrendingUp,      key:'nav.forecast',   label:'Forecast',          roles:['analyst','supervisor','policymaker'] },
+  { to:'/financial', icon:DollarSign,      key:'nav.financial',  label:'Financial Crime',   roles:['investigator','analyst','supervisor'] },
+  { to:'/admin',     icon:ShieldCheck,     key:'nav.admin',      label:'Approvals',         roles:['supervisor'] },
 ];
 
 export default function Sidebar() {
@@ -28,97 +27,133 @@ export default function Sidebar() {
   const allowed = NAV.filter(n => n.roles.includes(user.role));
 
   return (
-    <aside className="flex flex-col shrink-0 h-screen"
-           style={{ width:'220px', background:'#020a16', borderRight:'1px solid #0c2040' }}>
+    <aside style={{
+      width: '228px', flexShrink: 0, height: '100vh',
+      background: '#050810',
+      borderRight: '1px solid rgba(255,255,255,0.04)',
+      display: 'flex', flexDirection: 'column',
+    }}>
 
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-4 shrink-0"
-           style={{ borderBottom:'1px solid #0c2040' }}>
-        <div className="relative shrink-0" style={{ width:36, height:36 }}>
-          <div className="absolute inset-0 rounded-xl"
-               style={{ background:'rgba(26,86,219,0.15)', border:'1px solid rgba(26,86,219,0.45)' }} />
+      <div style={{
+        padding: '20px 18px 18px',
+        borderBottom: '1px solid rgba(255,255,255,0.04)',
+        display: 'flex', alignItems: 'center', gap: '12px',
+      }}>
+        <div style={{
+          width: 38, height: 38, borderRadius: '10px', flexShrink: 0,
+          background: 'rgba(79,70,229,0.15)',
+          border: '1px solid rgba(79,70,229,0.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 20px rgba(79,70,229,0.2)',
+        }}>
           <img src="/ksp-logo.svg" alt="KSP"
-               style={{ width:'100%', height:'100%', objectFit:'contain', padding:'3px', position:'relative', zIndex:1 }} />
+               style={{ width: 28, height: 28, objectFit: 'contain' }}
+               onError={e => {
+                 (e.target as HTMLImageElement).style.display = 'none';
+                 (e.target as HTMLImageElement).parentElement!.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+               }} />
         </div>
         <div>
-          <div className="font-display font-bold text-white" style={{ fontSize:'13px', letterSpacing:'.06em' }}>
+          <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14, color:'#f1f5f9', letterSpacing:'.04em' }}>
             KSP · CID
           </div>
-          <div className="font-mono" style={{ color:'#1e4a6e', fontSize:'8px', letterSpacing:'.12em' }}>
-            INTELLIGENCE SYSTEM
+          <div style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(79,70,229,0.7)', letterSpacing:'.16em', marginTop:1 }}>
+            KIRAN SYSTEM
           </div>
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2">
-        <div className="font-mono px-2 pb-2" style={{ color:'#1e4a6e', fontSize:'8px', letterSpacing:'.14em' }}>
+      <nav style={{ flex: 1, overflowY: 'auto', padding: '12px 10px' }}>
+        <div className="section-label" style={{ padding:'4px 10px 10px', color:'rgba(255,255,255,0.2)' }}>
           {t('nav.modules')}
         </div>
-        {allowed.map(({ to, icon:Icon, key }) => (
-          <NavLink key={to} to={to}
-            className="flex items-center gap-2.5 px-3 py-2 rounded-xl mb-0.5 transition-all duration-150 group"
-            style={({ isActive }) => ({
-              background: isActive ? 'rgba(26,86,219,0.2)' : 'transparent',
-              border: isActive ? '1px solid rgba(26,86,219,0.35)' : '1px solid transparent',
-              boxShadow: isActive ? '0 0 12px rgba(26,86,219,0.12)' : 'none',
-            })}
-          >
+        {allowed.map(({ to, icon: Icon, key, label }) => (
+          <NavLink key={to} to={to} style={{ textDecoration:'none', display:'block', marginBottom:2 }}>
             {({ isActive }) => (
-              <>
-                <Icon size={14}
-                      style={{ color: isActive ? '#60a5fa' : '#2a5a8a',
-                               transition:'color .15s' }}
-                      className={!isActive ? 'group-hover:!text-blue-400' : ''} />
-                <span className="font-body text-sm transition-colors"
-                      style={{ color: isActive ? '#93c5fd' : '#3d6494' }}
-                      onMouseEnter={e => { if (!isActive) (e.target as HTMLElement).style.color = '#8eafd4'; }}
-                      onMouseLeave={e => { if (!isActive) (e.target as HTMLElement).style.color = '#3d6494'; }}>
-                  {t(key)}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '9px 12px', borderRadius: 8,
+                background: isActive ? 'rgba(79,70,229,0.18)' : 'transparent',
+                border: `1px solid ${isActive ? 'rgba(79,70,229,0.35)' : 'transparent'}`,
+                transition: 'all .15s',
+                cursor: 'pointer',
+                position: 'relative',
+              }}
+              onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; }}
+              onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+                {isActive && (
+                  <div style={{
+                    position:'absolute', left:0, top:6, bottom:6, width:3,
+                    background:'linear-gradient(180deg,#4f46e5,#06b6d4)',
+                    borderRadius:'0 2px 2px 0',
+                    boxShadow:'0 0 8px rgba(79,70,229,0.6)',
+                  }} />
+                )}
+                <Icon size={15} style={{ color: isActive ? '#818cf8' : 'rgba(255,255,255,0.3)', flexShrink:0 }} />
+                <span style={{
+                  fontFamily:'var(--font-body)', fontSize:13, fontWeight:isActive?500:400,
+                  color: isActive ? '#c7d2fe' : 'rgba(255,255,255,0.4)',
+                }}>
+                  {t(key) || label}
                 </span>
-                {isActive && <ChevronRight size={10} className="ml-auto text-blue-400 opacity-50" />}
-              </>
+                {isActive && <ChevronRight size={11} style={{ marginLeft:'auto', color:'rgba(129,140,248,0.5)' }} />}
+              </div>
             )}
           </NavLink>
         ))}
       </nav>
 
-      {/* Status indicator */}
-      <div className="mx-3 mb-3 px-3 py-2 rounded-xl"
-           style={{ background:'rgba(5,150,105,0.08)', border:'1px solid rgba(5,150,105,0.2)' }}>
-        <div className="flex items-center gap-2">
-          <span className="live-dot" />
-          <span className="font-mono" style={{ color:'#10b981', fontSize:'9px', letterSpacing:'.08em' }}>
-            SYSTEM ACTIVE
-          </span>
-        </div>
-        <div className="font-mono mt-1" style={{ color:'#1e4a6e', fontSize:'8px' }}>
-          KIRAN AI · Llama 3.3 70B
+      {/* System status */}
+      <div style={{ padding:'10px 14px', margin:'0 10px 8px' }}>
+        <div style={{
+          padding:'10px 12px', borderRadius:8,
+          background:'rgba(16,185,129,0.06)',
+          border:'1px solid rgba(16,185,129,0.15)',
+        }}>
+          <div style={{ display:'flex', alignItems:'center', gap:7, marginBottom:4 }}>
+            <span className="live-dot" style={{ width:6, height:6 }} />
+            <span style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'var(--green)', letterSpacing:'.1em' }}>
+              SYSTEM ACTIVE
+            </span>
+          </div>
+          <div style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(255,255,255,0.2)' }}>
+            KIRAN · Llama 3.3 70B
+          </div>
         </div>
       </div>
 
       {/* User */}
-      <div className="px-3 pb-4 shrink-0" style={{ borderTop:'1px solid #0c2040', paddingTop:'12px' }}>
-        <div className="px-3 py-2.5 rounded-xl mb-2"
-             style={{ background:`${rc.color}0f`, border:`1px solid ${rc.color}28` }}>
-          <div className="font-display font-bold text-xs tracking-widest"
-               style={{ color:rc.color, fontSize:'9px' }}>
+      <div style={{ padding:'10px 10px 14px', borderTop:'1px solid rgba(255,255,255,0.04)' }}>
+        <div style={{
+          padding:'10px 12px', borderRadius:8,
+          background:`${rc.color}0d`,
+          border:`1px solid ${rc.color}22`,
+          marginBottom:6,
+        }}>
+          <div style={{ fontFamily:'var(--font-mono)', fontSize:9, color:rc.color, letterSpacing:'.1em', marginBottom:4 }}>
             {rc.label.toUpperCase()}
           </div>
-          <div className="font-medium text-sm text-white mt-0.5 truncate">{user.name}</div>
-          <div className="font-mono" style={{ color:'#1e4a6e', fontSize:'9px', marginTop:'1px' }}>
+          <div style={{ fontFamily:'var(--font-display)', fontWeight:600, fontSize:13, color:'#f1f5f9', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+            {user.name}
+          </div>
+          <div style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'rgba(255,255,255,0.2)', marginTop:2 }}>
             {user.badgeNumber}
           </div>
         </div>
-        <button onClick={logout}
-          className="flex items-center gap-2 w-full px-3 py-1.5 rounded-lg text-xs transition-colors"
-          style={{ color:'#1e4a6e' }}
-          onMouseEnter={e => (e.currentTarget.style.color = '#ef4444')}
-          onMouseLeave={e => (e.currentTarget.style.color = '#1e4a6e')}>
-          <LogOut size={11} /> {t('nav.signout')}
-          
+        <button onClick={logout} style={{
+          display:'flex', alignItems:'center', gap:7, width:'100%',
+          padding:'7px 12px', borderRadius:6, border:'none', cursor:'pointer',
+          background:'transparent', color:'rgba(255,255,255,0.25)',
+          fontFamily:'var(--font-body)', fontSize:12,
+          transition:'color .15s',
+        }}
+        onMouseEnter={e => (e.currentTarget.style.color = '#ef4444')}
+        onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}>
+          <LogOut size={12} /> {t('nav.signout')}
         </button>
       </div>
     </aside>
   );
-}
+} 

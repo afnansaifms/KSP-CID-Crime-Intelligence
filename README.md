@@ -13,7 +13,7 @@
 KIRAN (Karnataka Intelligence and Response Analysis Network) is a full-stack AI-powered crime intelligence platform that enables Karnataka State Police investigators, analysts, supervisors and policymakers to interact with the state crime database using natural language — in English or Kannada, by typing or speaking.
 
 Instead of navigating complex database interfaces, officers simply ask questions like:
-- *"Who is Ravi Kumar G.?"*
+- *"Who is Nagesh M. Pai?"*
 - *"What are the drug trafficking hotspots in Bengaluru?"*
 - *"Show me all OPEN robbery cases in Koramangala"*
 - *"ಬೆಂಗಳೂರಿನಲ್ಲಿ ಅಧಿಕ ಅಪಾಯದ ಆರೋಪಿಗಳನ್ನು ತೋರಿಸಿ"*
@@ -118,12 +118,11 @@ Email: `chief@ksp.gov.in` | Password: `KSP@Chief2024`
 
 ```bash
 # Clone the repository
-git clone https://github.com/afnansaifms/KSP-CID-Crime-Intelligence-Platform.git
+git https://github.com/afnansaifms/KSP-CID-Crime-Intelligence.git
 cd KSP-CID-Crime-Intelligence-Platform
 
 # Install dependencies
 npm install
-
 # Create environment file
 echo "VITE_GROQ_API_KEY=your_groq_key_here" > .env
 
@@ -222,7 +221,7 @@ ksp-crime-intelligence/
 | Resource | URL |
 |----------|-----|
 | Live Demo | https://ksp-cid-intelligence.onslate.in |
-| GitHub | https://github.com/afnansaifms/KSP-CID-Crime-Intelligence-Platform |
+| GitHub | https://github.com/afnansaifms/KSP-CID-Crime-Intelligence |
 | Demo Video | *[To be added]* |
 
 ---

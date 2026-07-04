@@ -15,7 +15,8 @@
   ],
   "functions": {
     "targets": [
-      "kiran-api"
+      "kiran-api",
+      "seeddata"
     ],
     "ignore": [],
     "source": "functions"
