@@ -1,300 +1,240 @@
-# KSP Crime Intelligence Platform
+# KIRAN — Karnataka Intelligence and Response Analysis Network
 
-> **Real-time Crime Intelligence & Analytics Dashboard for Karnataka State Police (KSP) Crime Investigation Department (CID)**
+> AI-powered Crime Intelligence Platform for Karnataka State Police CID  
+> KSP CID Datathon 2026 Submission — Team KIRAN
 
-A modern, bilingual (English & Kannada) web platform designed for law enforcement agencies to analyze, track, and forecast crime patterns with AI-driven insights.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-ksp--cid--intelligence.onslate.in-blue)](https://ksp-cid-intelligence.onslate.in)
+[![GitHub](https://img.shields.io/badge/GitHub-KSP--CID--Crime--Intelligence--Platform-black)](https://github.com/afnansaifms/KSP-CID-Crime-Intelligence-Platform)
 
-## 🎯 Overview
+---
 
-KSP Crime Intelligence Platform is a comprehensive dashboard that empowers law enforcement officers with data-driven intelligence tools for crime investigation, network analysis, and predictive analytics. Built with cutting-edge web technologies, it provides a user-friendly interface for querying FIR databases, analyzing criminal networks, and generating actionable intelligence reports.
+## What is KIRAN?
 
-## ✨ Key Features
+KIRAN (Karnataka Intelligence and Response Analysis Network) is a full-stack AI-powered crime intelligence platform that enables Karnataka State Police investigators, analysts, supervisors and policymakers to interact with the state crime database using natural language — in English or Kannada, by typing or speaking.
 
-### 📊 **Dashboard & Analytics**
-- Real-time crime statistics and KPIs (active cases, today's FIRs, high-risk offenders)
-- 12-month crime trend analysis with multi-category breakdown
-- District-wise crime comparison and heatmaps
-- Crime distribution by category and time of day
-- Live status indicators and recent case summaries
+Instead of navigating complex database interfaces, officers simply ask questions like:
+- *"Who is Ravi Kumar G.?"*
+- *"What are the drug trafficking hotspots in Bengaluru?"*
+- *"Show me all OPEN robbery cases in Koramangala"*
+- *"ಬೆಂಗಳೂರಿನಲ್ಲಿ ಅಧಿಕ ಅಪಾಯದ ಆರೋಪಿಗಳನ್ನು ತೋರಿಸಿ"*
 
-### 💬 **AI-Powered Chat Intelligence**
-- Natural language queries for crime data (FIRs, accused, locations, hotspots)
-- Bilingual support: English and Kannada with speech recognition
-- Context-aware responses with confidence scoring
-- Quick query suggestions for common searches
-- PDF export capability for chat conversations
-- System integration showing indexed data metrics (10,247 FIRs, 2,156 accused profiles)
+---
 
-### 🕸️ **Criminal Network Analysis**
-- Interactive network graph visualization
-- Node-based relationship mapping (accused, locations, organizations)
-- Risk level indicators and connection strength metrics
-- Cluster detection and gang member associations
-- Real-time network statistics
+## Features
 
-### 🗺️ **Geographic Crime Heatmap**
-- Interactive Leaflet-based map of Karnataka
-- Crime incident distribution by location
-- Filterable by crime type and severity level
-- District statistics and hotspot identification
-- Real-time incident tracking
+| # | Feature | Status |
+|---|---------|--------|
+| 1 | Conversational AI — English + Kannada + Voice + PDF export | ✅ Live |
+| 2 | Criminal Network Analysis — interactive graph visualization | ✅ Live |
+| 3 | Crime Pattern & Trend Analytics — 12-month charts, district comparison | ✅ Live |
+| 4 | Geographic Crime Heatmap — dark map with severity filters | ✅ Live |
+| 5 | Criminology-Based Offender Profiling — risk scoring 0–100 | ✅ Live |
+| 6 | Financial Crime & Transaction Analysis — money trail network | ✅ Live |
+| 7 | Crime Forecasting & Early Warning — AI-driven projections | ✅ Live |
+| 8 | Explainable AI — every response cites FIR numbers and confidence % | ✅ Live |
+| 9 | Secure Role-Based Access — 4 roles, CID Chief approval workflow | ✅ Live |
+| 10 | Multi-language, Multi-theme UI — English/Kannada, Dark/Light | ✅ Live |
 
-### 👤 **Offender Profiles**
-- Comprehensive accused information with risk scoring (0-100)
-- Criminal history and modus operandi patterns
-- Known associates and connections
-- Active warrant status tracking
-- Financial links detection and suspicious transaction alerts
-- Last known location tracking
+---
 
-### 📈 **Predictive Analytics & Forecasting**
-- 30-60 day crime trend predictions
-- Early warning system for emerging crime patterns
-- Seasonal and temporal analysis
-- Historical vs. projected trend comparison
-- Risk escalation alerts
+## Tech Stack
 
-### 💰 **Financial Crime & Transaction Analysis**
-- Suspicious transaction flagging (₹ amount tracking)
-- Hawala network detection and analysis
-- Money trail visualization
-- Cross-state financial link identification
-- Fraud network mapping
+| Layer | Technologies |
+|-------|-------------|
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS |
+| Charts | Recharts, Leaflet.js |
+| AI / NLP | Groq API, Llama 3.3 70B |
+| Voice | Web Speech API |
+| Storage | Catalyst DataStore, IndexedDB |
+| Deployment | Zoho Catalyst Slate |
+| PDF Export | jsPDF |
 
-### 🔐 **Role-Based Access Control**
-- **Investigator** - Case queries, accused profiles, hotspot analysis
-- **Crime Analyst** - Deep pattern analysis, forecasting, network mapping
-- **Supervisor** - Full access with team oversight and priority alerts
-- **Policymaker** - Dashboard insights and strategic reporting
+---
 
-### 🌐 **Bilingual Support**
-- English and Kannada (ಕನ್ನದ) interfaces
-- Theme toggle (Light/Dark mode)
-- Localization for all content and UI elements
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **Frontend Framework** | React 19.2.6 + TypeScript |
-| **Build Tool** | Vite 8.0.12 |
-| **State Management** | React Context API |
-| **Routing** | React Router DOM 7.17 |
-| **UI Components** | Custom Components + Lucide React Icons |
-| **Charts & Visualization** | Recharts 3.8.1 |
-| **Maps** | Leaflet 1.9.4 + React-Leaflet 5.0 |
-| **Styling** | Tailwind CSS 3.4.19 |
-| **Export** | jsPDF 4.2.1 + html2canvas 1.4.1 |
-| **Language** | TypeScript 6.0.2 |
-| **Code Quality** | ESLint + TypeScript ESLint |
-
-## 📁 Project Structure
+## Architecture
 
 ```
-src/
-├── components/
-│   └── layout/
-│       ├── AppLayout.tsx      # Main application wrapper
-│       ├── Header.tsx         # Top navigation bar
-│       └── Sidebar.tsx        # Navigation sidebar with role-based menu
-├── pages/
-│   ├── Dashboard.tsx          # Home dashboard with KPIs
-│   ├── Chat.tsx              # AI chat interface
-│   ├── Network.tsx           # Criminal network visualization
-│   ├── Heatmap.tsx           # Geographic crime map
-│   ├── Analytics.tsx         # Pattern analysis & reports
-│   ├── Profile.tsx           # Offender profile search
-│   ├── Forecast.tsx          # Predictive analytics
-│   ├── Financial.tsx         # Financial crime analysis
-│   └── Login.tsx             # Authentication interface
-├── context/
-│   └── AppContext.tsx        # Global app state (theme, language, auth)
-├── hooks/
-│   └── useAuth.ts           # Authentication hook & role configs
-├── services/
-│   └── api.ts               # Backend API integration layer
-├── data/
-│   ├── mockData.ts          # Sample/mock database
-│   └── translations.ts      # i18n strings (EN & KN)
-├── types/
-│   └── index.ts             # TypeScript type definitions
-├── App.tsx                  # Root component
-├── main.tsx                 # Application entry point
-└── index.css / App.css      # Global & component styles
+Officer (Browser)
+       │
+       ▼
+React Frontend (Catalyst Slate)
+       │
+       ├── Smart Local Search (instant name/FIR lookup)
+       │
+       └── Groq API (Llama 3.3 70B)
+               │
+               ▼
+       Catalyst DataStore
+       ├── CaseMaster (500 FIRs)
+       ├── Accused (100 profiles)
+       ├── Victim (60 records)
+       ├── Unit (Police stations)
+       └── Employee (Officers)
 ```
 
-## 🚀 Getting Started
+---
+
+## Database Schema
+
+Modeled on the **official Karnataka Police FIR ER Diagram**:
+
+| Table | Description |
+|-------|-------------|
+| `CaseMaster` | FIR records — CrimeNo, district, PS, status, GPS coordinates |
+| `Accused` | Accused profiles — risk score, MO, associates, warrant status |
+| `Victim` | Victim records linked to FIRs |
+| `Unit` | Police stations across 30 Karnataka districts |
+| `Employee` | Investigating officers with rank and designation |
+
+CrimeNo follows the official KSP format:  
+`1 + DistrictID + StationID + Year + Serial` → e.g. `104430006202600001`
+
+---
+
+## Role-Based Access
+
+| Role | Access |
+|------|--------|
+| **Investigator** | Chat, Network, Heatmap, Profiles, Financial |
+| **Crime Analyst** | All modules + Analytics |
+| **Supervisor** | All modules + Registration Approvals |
+| **Policymaker** | Dashboard, Analytics, Heatmap, Forecast |
+
+New officer registrations require **CID Chief approval** before access is granted.
+
+**Demo credentials:**  
+Email: `chief@ksp.gov.in` | Password: `KSP@Chief2024`
+
+---
+
+## Local Setup
 
 ### Prerequisites
-- Node.js 18+ and npm/yarn
-- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Node.js 20+
+- npm 9+
+- Groq API key (free at [console.groq.com](https://console.groq.com))
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ksp-crime-intelligence.git
-cd ksp-crime-intelligence
+git clone https://github.com/afnansaifms/KSP-CID-Crime-Intelligence-Platform.git
+cd KSP-CID-Crime-Intelligence-Platform
 
 # Install dependencies
 npm install
 
+# Create environment file
+echo "VITE_GROQ_API_KEY=your_groq_key_here" > .env
+
 # Start development server
 npm run dev
-# App will be available at http://localhost:5173
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Run linter
-npm lint
 ```
 
-## 📊 Data Models
+Open [http://localhost:5173](http://localhost:5173)
 
-### Core Types
-- **User** - Authenticated officer with role and badge number
-- **FIR** - First Information Report with crime details, status, and location
-- **Accused** - Criminal profile with risk score and associations
-- **Victim** - Victim information for case management
-- **ChatMessage** - Conversational AI messages with citations
-- **NetworkNode/Edge** - Graph elements for relationship mapping
-- **CrimeCategory** - 13 crime types (robbery, theft, assault, cybercrime, etc.)
-
-## 🔐 Authentication & Roles
-
-The platform uses role-based access control with 4 user profiles:
-
-| Role | Permissions | Access Level |
-|------|-----------|--------------|
-| **Investigator** | Query FIRs, profiles, networks | 5 modules |
-| **Crime Analyst** | All investigator + forecasting | 6 modules |
-| **Supervisor** | Full access + team oversight | All modules |
-| **Policymaker** | Dashboard, analytics, reports | 4 modules |
-
-## 🎨 UI/UX Features
-
-- **Dark Theme by Default** - Eye-friendly design for extended viewing
-- **Responsive Layout** - Optimized for desktop with sidebar navigation
-- **Real-time Updates** - Live data indicators and status badges
-- **Interactive Charts** - Recharts with hover tooltips and legends
-- **Export Options** - PDF reports and chat transcript downloads
-- **Accessibility** - ARIA labels, keyboard navigation, high contrast
-
-## 📋 Sample Data
-
-The platform includes mock data representing:
-- **10,247** indexed FIRs across Karnataka
-- **2,156** accused profiles with criminal histories
-- **30 districts** with crime statistics
-- **7 crime categories** with trend data
-- **Multi-language support** with 100+ localization strings
-
-## 🔄 API Integration
-
-The `services/api.ts` layer provides abstraction for:
-- FIR database queries (search, filter, sort)
-- Accused profile lookups
-- Location-based heatmap data
-- Chat query processing (AI backend integration)
-- Network graph data generation
-- Forecasting predictions
-
-*Note: Currently uses mock data. Replace with backend API endpoints as needed.*
-
-## 🌍 Internationalization
-
-The app supports two languages:
-- **English (en)** - Default interface language
-- **Kannada (kn)** - ಕನ್ನದ regional language support
-
-Switch languages using the theme toggle in the top navigation. All strings are centralized in `context/AppContext.tsx`.
-
-## 📱 Browser Support
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-## 📈 Performance
-
-- **Build Size**: ~1.3MB (JS) + 32KB (CSS) after minification
-- **Initial Load**: <2s on modern connections
-- **Chunk Splitting**: Code-split by route for optimal loading
-- **Tree Shaking**: Enabled for production builds
-
-> Note: Consider implementing dynamic imports for further optimization
-
-## 🔧 Development Commands
+### Build for Production
 
 ```bash
-npm run dev       # Start dev server with HMR
-npm run build     # TypeScript check + Vite build
-npm run preview   # Preview production build
-npm lint          # Run ESLint
+npm run build
 ```
 
-## 📝 Key Components
-
-### Pages
-- **Dashboard.tsx** - KPI cards, trend charts, recent cases, top districts
-- **Chat.tsx** - Chat interface with voice input, suggestions, PDF export
-- **Network.tsx** - Interactive criminal network graph visualization
-- **Heatmap.tsx** - Leaflet map with crime incident markers
-- **Analytics.tsx** - Multi-chart analysis (trends, distribution, hourly)
-- **Profile.tsx** - Searchable accused database with detailed profiles
-- **Forecast.tsx** - Predictive charts and early warning alerts
-- **Financial.tsx** - Transaction flow network and suspicious activity mapping
-
-### Layout Components
-- **AppLayout.tsx** - Root wrapper with sidebar + main content
-- **Header.tsx** - Top bar with title, user info, theme/language toggles
-- **Sidebar.tsx** - Navigation menu with role-based filtering
-
-## 🎯 Future Enhancements
-
-- [ ] Backend API integration (replace mock data)
-- [ ] Real-time WebSocket updates
-- [ ] Advanced geospatial analysis (clustering, density mapping)
-- [ ] Custom report builder
-- [ ] Machine learning model integration for risk scoring
-- [ ] Mobile-responsive design
-- [ ] Advanced audit logging
-- [ ] Notification system for alerts
-- [ ] Multi-language expansion (Marathi, Tamil, Telugu)
-
-## 📄 License
-
-[Specify your license - MIT, Apache 2.0, etc.]
-
-## 👥 Contributing
-
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📞 Support & Contact
-
-For issues, feature requests, or questions:
-- Open an issue on GitHub
-- Contact: [Your Email/Contact Info]
-
-## 🙏 Acknowledgments
-
-- Karnataka State Police for crime data structure
-- React and open-source community
-- Lucide React for icons
-- Recharts for visualization library
+Output will be in the `dist/` folder.
 
 ---
 
-**Built with ❤️ for Law Enforcement Intelligence**
+## Deployment on Catalyst
 
-Last Updated: 2024
+This project is deployed on **Zoho Catalyst Slate** as required by the KSP CID Datathon 2026.
+
+```bash
+# Install Catalyst CLI
+npm install -g zcatalyst-cli
+
+# Login
+catalyst login
+
+# Build and deploy via Catalyst Slate (drag-and-drop dist/ folder)
+npm run build
+```
+
+Then upload the `dist/` folder via Catalyst Console → Web Client Hosting → Upload.
+
+---
+
+## Seeding the Database
+
+To populate Catalyst DataStore with 500 FIRs and 100 accused profiles:
+
+```bash
+# Install Python dependencies
+pip install requests faker
+
+# Add your Catalyst token to seed_catalyst.py
+# CATALYST_TOKEN = '1000.xxxxxxxxxx.xxxxxxxxxx'
+
+python seed_catalyst.py
+```
+
+---
+
+## Project Structure
+
+```
+ksp-crime-intelligence/
+├── src/
+│   ├── context/
+│   │   └── AppContext.tsx          # Theme + language state
+│   ├── data/
+│   │   └── mockData.ts             # 500 FIRs, 100 accused, 60 victims
+│   ├── hooks/
+│   │   └── useAuth.ts              # Auth + RBAC
+│   ├── pages/
+│   │   ├── Login.tsx               # Auth with CID Chief approval flow
+│   │   ├── Dashboard.tsx           # Intelligence overview
+│   │   ├── Chat.tsx                # KIRAN AI chatbot
+│   │   ├── Network.tsx             # Criminal network graph
+│   │   ├── Heatmap.tsx             # Crime geographic map
+│   │   ├── Analytics.tsx           # Trend charts
+│   │   ├── Profile.tsx             # Offender profiles
+│   │   ├── Forecast.tsx            # Crime forecasting
+│   │   ├── Financial.tsx           # Financial crime analysis
+│   │   └── Admin.tsx               # CID Chief approval panel
+│   ├── services/
+│   │   ├── api.ts                  # Groq AI + smart local search
+│   │   ├── authStorage.ts          # Registration system
+│   │   └── chatStorage.ts          # IndexedDB chat history
+│   └── components/
+│       └── layout/
+│           ├── Sidebar.tsx
+│           ├── Header.tsx
+│           └── AppLayout.tsx
+├── public/
+│   └── ksp-logo.svg
+├── seed_catalyst.py                # Database seeding script
+└── catalyst.json                   # Catalyst project config
+```
+
+---
+
+## Links
+
+| Resource | URL |
+|----------|-----|
+| Live Demo | https://ksp-cid-intelligence.onslate.in |
+| GitHub | https://github.com/afnansaifms/KSP-CID-Crime-Intelligence-Platform |
+| Demo Video | *[To be added]* |
+
+---
+
+## Team
+
+**Team KIRAN** — KSP CID Datathon 2026  
+Team Leader: Afnan Saif M S  
+Team Size: 3
+
+---
+
+## License
+
+Built for KSP CID Datathon 2026. All rights reserved.
