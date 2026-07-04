@@ -4,7 +4,7 @@
 > KSP CID Datathon 2026 Submission — Team KIRAN
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-ksp--cid--intelligence.onslate.in-blue)](https://ksp-cid-intelligence.onslate.in)
-[![GitHub](https://img.shields.io/badge/GitHub-KSP--CID--Crime--Intelligence--Platform-black)](https://github.com/afnansaifms/KSP-CID-Crime-Intelligence-Platform)
+[![GitHub](https://img.shields.io/badge/GitHub-KSP--CID--Crime--Intelligence--Platform-black)](https://github.com/afnansaifms/KSP-CID-Crime-Intelligence)
 
 ---
 
