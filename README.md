@@ -237,3 +237,4 @@ Team Size: 3
 ## License
 
 Built for KSP CID Datathon 2026. All rights reserved.
+Design and developed by TriTech Titans
